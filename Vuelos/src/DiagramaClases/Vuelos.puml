@@ -1,0 +1,77 @@
+@startuml Vuelos
+
+package modelo {
+    class Cliente {
+        +hacerReserva(tipoVuelo: TipoVuelo, cantAsientos: int): FlightBooking
+    }
+
+    class Director {
+        +construirReservaEstandar(builder: Builder, cantAsientos: int)
+        +construirReservaPremium(builder: Builder, cantAsientos: int)
+    }
+
+    interface Builder {
+        +reiniciar()
+        +establecerSeleccionAsiento(seleccionAsiento: String)
+        +establecerCantidadEquipaje(cantidad: int)
+        +establecerTipoComida(tipoVuelo: TipoVuelo)
+        +establecerServiciosPremium(servicios: String)
+    }
+
+    class FlightBookingBuilder implements Builder {
+        -reservaVuelo: FlightBooking
+        +reiniciar()
+        +establecerSeleccionAsiento(seleccionAsiento: String)
+        +establecerCantidadEquipaje(cantidad: int)
+        +establecerTipoComida(tipoVuelo: TipoVuelo)
+        +establecerServiciosPremium(servicios: String)
+        +obtenerResultado(): FlightBooking
+    }
+
+    class FlightBooking {
+        -seleccionAsiento: String
+        -cantidadEquipaje: int
+        -comida: Comida
+        -serviciosPremium: String
+        +getSeleccionAsiento(): String
+        +setSeleccionAsiento(seleccionAsiento: String)
+        +getCantidadEquipaje(): int
+        +setCantidadEquipaje(cantidadEquipaje: int)
+        +getComida(): Comida
+        +setComida(comida: Comida)
+        +getServiciosPremium(): String
+        +setServiciosPremium(serviciosPremium: String)
+        +toString(): String
+    }
+
+    class Comida {
+        -tipoVuelo: TipoVuelo
+        -platos: String[]
+        +getTipoVuelo(): TipoVuelo
+        +setTipoVuelo(tipoVuelo: TipoVuelo)
+        +getPlatos(): String[]
+        +setPlatos()
+        +toString(): String
+    }
+
+    class ComidaEstandar extends Comida {
+        +ComidaEstandar()
+    }
+
+    class ComidaPremium extends Comida {
+        +ComidaPremium()
+    }
+
+    enum TipoVuelo {
+        ESTANDAR, PREMIUM
+    }
+
+    Cliente --> Director
+    Director --> Builder
+    Builder <|.. FlightBookingBuilder
+    FlightBookingBuilder --> FlightBooking
+    FlightBooking --> Comida
+    FlightBookingBuilder --> TipoVuelo
+}
+
+@enduml
